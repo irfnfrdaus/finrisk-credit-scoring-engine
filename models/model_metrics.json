@@ -1,0 +1,18 @@
+{
+    "Logistic Regression (Basel Baseline)": {
+        "roc_auc": 0.8452643837130688,
+        "pr_auc": 0.6463776674520462,
+        "ks_statistic": 0.5396569142851267,
+        "brier_score": 0.15814207019239382,
+        "accuracy": 0.6675,
+        "f1_score": 0.49236641221374045
+    },
+    "Gradient Boosting Risk Engine": {
+        "roc_auc": 0.8404115434744048,
+        "pr_auc": 0.6236535733679925,
+        "ks_statistic": 0.5329473854688573,
+        "brier_score": 0.1064664516903881,
+        "accuracy": 0.840625,
+        "f1_score": 0.5572916666666666
+    }
+}
