@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  finrisk-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: finrisk-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - ENVIRONMENT=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  finrisk-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: finrisk-dashboard
+    ports:
+      - "8501:8501"
+    depends_on:
+      finrisk-api:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  default:
+    name: finrisk-network

@@ -1,5 +1,8 @@
 # 💳 FinRisk-Engine: Enterprise Credit Risk Scoring & Automated Underwriting System
 
+[![CI/CD Quality Gate](https://github.com/irfnfrdaus/finrisk-credit-scoring-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/irfnfrdaus/finrisk-credit-scoring-engine/actions)
+[![Docker](https://img.shields.io/badge/Docker-Compose%20Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![SDET Quality Gate](https://img.shields.io/badge/SDET-11%2F11%20Tests%20Passing-8B5CF6)](https://github.com/irfnfrdaus/finrisk-credit-scoring-engine)
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.14-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.32+-FF4B4B.svg?logo=streamlit&logoColor=white)](https://streamlit.io)
@@ -175,35 +178,84 @@ streamlit run app/streamlit_app.py
 
 ---
 
+## 🐳 DevOps & SDET CI/CD Pipeline
+
+FinRisk-Engine is architected with modern cloud-native DevOps principles and automated quality gates:
+
+```mermaid
+flowchart LR
+    A["💻 Irfan pushes code"] --> B["⚙️ GitHub Actions (Ubuntu VM)"]
+    B --> C["📦 Cache & Install Deps (Python 3.11)"]
+    C --> D["🧪 Automated SDET Tests (11/11 Passing in 0.3s)"]
+    D --> E["🐳 Multi-Container Docker Buildx Validation"]
+    E --> F["🚀 Certified Production FastAPI & Streamlit Containers"]
+```
+
+### 1. 🧪 Automated SDET Quality Gate
+Execute the comprehensive automated test suite verifying feature engineering math, credit risk scoring bounds, underwriting decisions, and FastAPI endpoints:
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+* **11/11 Tests Passed in <0.4 seconds:**
+  - `test_feature_engineering_ratios` — Validates DTI, monthly payment, and CSI transformations
+  - `test_prime_applicant_approval` — Validates approval & low default probability for prime borrowers
+  - `test_subprime_applicant_rejection` — Validates rejection & high default probability for subprime borrowers
+  - `test_database_logging` — Verifies persistent SQLite audit trail writing and querying
+  - `test_root_endpoint` — Validates `/` API health and metadata
+  - `test_health_check_endpoint` — Validates `/health` system and model readiness
+  - `test_score_valid_applicant` — Tests single-borrower underwriting evaluation
+  - `test_score_invalid_underage_applicant` — Pydantic negative gate rejecting age < 18 (422 Unprocessable Entity)
+  - `test_batch_scoring_endpoint` — Tests portfolio batch scoring & aggregation
+  - `test_audit_log_endpoint` — Validates compliance audit trail retrieval
+  - `test_portfolio_metrics_endpoint` — Validates aggregated credit portfolio KPIs
+
+### 2. 🐳 1-Click Multi-Container Deployment (Docker Compose)
+Spin up the entire underwriting architecture (FastAPI REST Engine + Streamlit Portal) with a single command:
+```bash
+docker compose up --build
+```
+* **`finrisk-api`**: FastAPI REST engine on port `8000` with Swagger docs at `http://localhost:8000/docs`.
+* **`finrisk-dashboard`**: Streamlit executive risk console at `http://localhost:8501`.
+
+---
+
 ## 📂 Repository Structure
 
 ```text
 finrisk-credit-scoring-engine/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                      # GitHub Actions CI/CD Quality Gate Pipeline
 ├── api/
-│   └── main.py                 # FastAPI high-speed REST API & validation schemas
+│   └── main.py                         # FastAPI high-speed REST API & validation schemas
 ├── app/
-│   └── streamlit_app.py        # Streamlit executive underwriting & analytics dashboard
+│   └── streamlit_app.py                # Streamlit executive underwriting & analytics dashboard
 ├── data/
 │   ├── raw/
-│   │   └── loan_data.csv       # Calibrated 16,000-record banking loan portfolio
+│   │   └── loan_data.csv               # Calibrated 16,000-record banking loan portfolio
 │   └── processed/
-│       └── loan_features.parquet # Feature-engineered data store
+│       └── loan_features.parquet       # Feature-engineered data store
 ├── database/
-│   ├── db.py                   # SQLite compliance audit engine
-│   └── credit_audit.db         # Persistent evaluation records
+│   ├── db.py                           # SQLite compliance audit engine
+│   └── credit_audit.db                 # Persistent evaluation records
 ├── models/
-│   ├── credit_risk_model.joblib # Serialized production risk scoring model
-│   └── model_metrics.json      # Performance telemetry & KS benchmarks
+│   ├── credit_risk_model.joblib        # Serialized production risk scoring model
+│   └── model_metrics.json              # Performance telemetry & KS benchmarks
 ├── src/
-│   ├── data_generator.py       # Basel-calibrated synthetic banking data generator
-│   ├── feature_engineering.py  # DTI, CSI, and scikit-learn transformers
-│   ├── risk_engine.py          # Decision matrices, affordability caps, explanations
-│   └── train_model.py          # Model training, KS stat calculation, validation
+│   ├── data_generator.py               # Basel-calibrated synthetic banking data generator
+│   ├── feature_engineering.py          # DTI, CSI, and scikit-learn transformers
+│   ├── risk_engine.py                  # Decision matrices, affordability caps, explanations
+│   └── train_model.py                  # Model training, KS stat calculation, validation
 ├── tests/
-│   └── test_engine.py          # Automated unit & integration test suite
+│   ├── test_engine.py                  # Core ML feature & risk calculation tests
+│   └── test_api.py                     # SDET FastAPI endpoint & validation tests
+├── Dockerfile.api                      # FastAPI production container definition
+├── Dockerfile.dashboard                # Streamlit dashboard container definition
+├── docker-compose.yml                  # Multi-container orchestration & networking
+├── .dockerignore                       # Build context optimization rules
 ├── .gitignore
 ├── requirements.txt
-└── README.md                   # Executive documentation
+└── README.md                           # Executive documentation
 ```
 
 ---
